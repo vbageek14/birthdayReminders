@@ -8,7 +8,7 @@ import math
 
 def main():
     # Create a dataframe from csv file with birthdate info
-    df = pd.read_csv("/Users/konstimac/Documents/Coding/Python/Birthdays.csv")
+    df = pd.read_csv("/Users/konstimac/Documents/Coding/Python/Birthday Reminders/Birthdays.csv")
 
     # Create separate filtered dataframes for each condition
     df_Dina = df[df["Recipient"] != "Konsti"]
@@ -45,10 +45,10 @@ def get_mail(names):
 
     if len(names) == 1:
         name, year, recipient = names[0]
-        age = current_year - int(year)
         body = f"{name} has a birthday today.\n\n"
-        if year:
-            body += f"{name} is turning {age} years old."
+        if year and not math.isnan(year):
+            age = current_year - int(year)
+            body += f"They are turning {age} years old."
     else:
         body = ", ".join(name_list[:-1]) + ", and " + name_list[-1] + " have birthdays today.\n\n"
 
@@ -80,16 +80,12 @@ def send_mail(birthday_names, recipient):
 
         if recipient == "Dina":
             smtp.sendmail(config.EMAIL_ADDRESS, config.RECIPIENT1, msg.as_string())
-            pass
             
         if recipient == "Konsti":
             smtp.sendmail(config.EMAIL_ADDRESS, config.RECIPIENT2, msg.as_string())
-            pass
             
         if recipient == "Both":
-            smtp.sendmail(config.EMAIL_ADDRESS, config.BOTH_RECIPIENTS, msg.as_string())
-            pass
-            
+            smtp.sendmail(config.EMAIL_ADDRESS, config.BOTH_RECIPIENTS, msg.as_string())            
     
 if __name__ == "__main__":
     main()
